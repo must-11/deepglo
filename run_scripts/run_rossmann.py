@@ -81,35 +81,6 @@ logger = logging.getLogger(__name__)
 
 
 def main(args):
-    print("==LOCAL MODEL====================")
-    TC = LocalModel(
-        Ymat,
-        num_inputs=1,
-        num_channels=num_channels_Y,
-        kernel_size=kernel_size,
-        dropout=dropout,
-        vbsize=vbsize,
-        hbsize=hbsize,
-        num_epochs=y_iters,
-        lr=lr,
-        val_len=val_len,
-        test=True,
-        end_index=end_index - val_len - 1,
-        normalize=False,
-        start_date=start_date,
-        freq=freq,
-        covariates=covariates,
-        use_time=use_time,
-        dti=dti,
-        Ycov=None,
-    )
-    TC.train_model(early_stop=True, tenacity=7)
-
-    result_dic = TC.rolling_validation(
-        Ymat=Ymat, tau=24, n=7, bsize=100, cpu=False, alpha=0.3
-    )
-    print(result_dic)
-
     print("==GLOBAL MODEL====================")
     DG = DeepGLO(
         Ymat,
@@ -143,6 +114,37 @@ def main(args):
     print(result_dic)
 
 
+def main_local(args):
+    print("==LOCAL MODEL====================")
+    TC = LocalModel(
+        Ymat,
+        num_inputs=1,
+        num_channels=num_channels_Y,
+        kernel_size=kernel_size,
+        dropout=dropout,
+        vbsize=vbsize,
+        hbsize=hbsize,
+        num_epochs=y_iters,
+        lr=lr,
+        val_len=val_len,
+        test=True,
+        end_index=end_index - val_len - 1,
+        normalize=False,
+        start_date=start_date,
+        freq=freq,
+        covariates=covariates,
+        use_time=use_time,
+        dti=dti,
+        Ycov=None,
+    )
+    TC.train_model(early_stop=True, tenacity=7)
+
+    result_dic = TC.rolling_validation(
+        Ymat=Ymat, tau=24, n=7, bsize=100, cpu=False, alpha=0.3
+    )
+    print(result_dic)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -155,3 +157,4 @@ if __name__ == "__main__":
     global normalize
     normalize = args.normalize
     main(args)
+    main_local(args)
