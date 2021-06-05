@@ -109,7 +109,7 @@ def main(args):
     DG.train_all_models(y_iters=y_iters, init_epochs=init_epochs)
 
     result_dic = DG.rolling_validation(
-        Ymat=Ymat, tau=24, n=7, bsize=100, cpu=False, alpha=0.3
+        Ymat=Ymat, tau=48, n=7, bsize=100, cpu=False, alpha=0.3
     )
     print(result_dic)
 
@@ -140,7 +140,7 @@ def main_local(args):
     TC.train_model(early_stop=True, tenacity=7)
 
     result_dic = TC.rolling_validation(
-        Ymat=Ymat, tau=24, n=7, bsize=100, cpu=False, alpha=0.3
+        Ymat=Ymat, tau=48, n=7, bsize=100, cpu=False, alpha=0.3
     )
     print(result_dic)
 
