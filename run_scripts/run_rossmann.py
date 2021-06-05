@@ -128,7 +128,7 @@ def main_local(args):
         lr=lr,
         val_len=val_len,
         test=True,
-        end_index=end_index - 1,
+        end_index=end_index - val_len,
         normalize=False,
         start_date=start_date,
         freq=freq,
@@ -156,5 +156,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     global normalize
     normalize = args.normalize
-    main_local(args)
     main(args)
+    main_local(args)
