@@ -57,8 +57,8 @@ dropout = 0.2  ## dropout during training
 rank = 64  ## rank of global model
 kernel_size_Y = 7  ## kernel size of hybrid model
 lr = 0.0005  ## learning rate
-val_len = 24  ## validation length
-end_index = Ymat.shape[1] - 24 * 7  ## models will not look beyond this during training
+val_len = 48  ## validation length
+end_index = Ymat.shape[1]  ## models will not look beyond this during training
 start_date = "2013-1-1"  ## start date time for the time-series
 freq = "H"  ## frequency of data
 covariates = None  ## no covraites specified
@@ -81,6 +81,36 @@ logger = logging.getLogger(__name__)
 
 
 def main(args):
+    print("LOCAL MODEL====================")
+    TC = LocalModel(
+        Ymat,
+        num_inputs=1,
+        num_channels=num_channels_Y,
+        kernel_size=kernel_size,
+        dropout=dropout,
+        vbsize=vbsize,
+        hbsize=hbsize,
+        num_epochs=y_iters,
+        lr=lr,
+        val_len=val_len,
+        test=True,
+        end_index=end_index - val_len,
+        normalize=False,
+        start_date=start_date,
+        freq=freq,
+        covariates=covariates,
+        use_time=use_time,
+        dti=dti,
+        Ycov=None,
+    )
+    TC.train_model(early_stop=True, tenacity=tenacity)
+
+    result_dic = LM.rolling_validation(
+        Ymat=Ymat, tau=24, n=7, bsize=100, cpu=False, alpha=0.3
+    )
+    print(result_dic)
+
+    print("GLOBAL MODEL====================")
     DG = DeepGLO(
         Ymat,
         vbsize=vbsize,
@@ -111,11 +141,6 @@ def main(args):
         Ymat=Ymat, tau=24, n=7, bsize=100, cpu=False, alpha=0.3
     )
     print(result_dic)
-
-    out_path = Path("./results",
-        "result_dictionary_electricity_" + bool2str(normalize) + ".pkl",
-    )
-    pickle.dump(result_dic, open(out_path, "wb"))
 
 
 if __name__ == "__main__":
