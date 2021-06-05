@@ -58,7 +58,7 @@ rank = 64  ## rank of global model
 kernel_size_Y = 7  ## kernel size of hybrid model
 lr = 0.0005  ## learning rate
 val_len = 48  ## validation length
-end_index = Ymat.shape[1]  ## models will not look beyond this during training
+end_index = Ymat.shape[1] - 1 * 48  ## models will not look beyond this during training
 start_date = "2013-1-1"  ## start date time for the time-series
 freq = "H"  ## frequency of data
 covariates = None  ## no covraites specified
@@ -109,7 +109,7 @@ def main(args):
     DG.train_all_models(y_iters=y_iters, init_epochs=init_epochs)
 
     result_dic = DG.rolling_validation(
-        Ymat=Ymat, tau=48, n=7, bsize=100, cpu=False, alpha=0.3
+        Ymat=Ymat, tau=48, n=1, bsize=100, cpu=False, alpha=0.3
     )
     print(result_dic)
 
@@ -128,7 +128,7 @@ def main_local(args):
         lr=lr,
         val_len=val_len,
         test=True,
-        end_index=end_index - val_len - 1,
+        end_index=end_index,
         normalize=False,
         start_date=start_date,
         freq=freq,
@@ -140,7 +140,7 @@ def main_local(args):
     TC.train_model(early_stop=True, tenacity=7)
 
     result_dic = TC.rolling_validation(
-        Ymat=Ymat, tau=48, n=7, bsize=100, cpu=False, alpha=0.3
+        Ymat=Ymat, tau=48, n=1, bsize=100, cpu=False, alpha=0.3
     )
     print(result_dic)
 
