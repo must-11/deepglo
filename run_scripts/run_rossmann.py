@@ -46,7 +46,7 @@ def bool2str(b):
         return "false"
 
 train = pd.read_csv("/kaggle/input/rossmann-store-sales/train.csv")
-Ymat = train.pivot(index="Store", columns="Date", values="Sales").values
+Ymat = train.pivot(index="Store", columns="Date", values="Sales").dropna(axis=0).values
 
 vbsize = 128  ## vertical batch size
 hbsize = 256  ## horizontal batch size
