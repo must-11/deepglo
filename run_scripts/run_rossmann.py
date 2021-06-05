@@ -81,7 +81,7 @@ logger = logging.getLogger(__name__)
 
 
 def main(args):
-    print("LOCAL MODEL====================")
+    print("==LOCAL MODEL====================")
     TC = LocalModel(
         Ymat,
         num_inputs=1,
@@ -94,7 +94,7 @@ def main(args):
         lr=lr,
         val_len=val_len,
         test=True,
-        end_index=end_index - val_len,
+        end_index=end_index - val_len - 1,
         normalize=False,
         start_date=start_date,
         freq=freq,
@@ -110,7 +110,7 @@ def main(args):
     )
     print(result_dic)
 
-    print("GLOBAL MODEL====================")
+    print("==GLOBAL MODEL====================")
     DG = DeepGLO(
         Ymat,
         vbsize=vbsize,
