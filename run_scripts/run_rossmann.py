@@ -103,7 +103,7 @@ def main(args):
         dti=dti,
         Ycov=None,
     )
-    TC.train_model(early_stop=True, tenacity=tenacity)
+    TC.train_model(early_stop=True, tenacity=7)
 
     result_dic = LM.rolling_validation(
         Ymat=Ymat, tau=24, n=7, bsize=100, cpu=False, alpha=0.3
